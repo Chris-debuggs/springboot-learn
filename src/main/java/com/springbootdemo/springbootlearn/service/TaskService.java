@@ -3,6 +3,7 @@ package com.springbootdemo.springbootlearn.service;
 import com.springbootdemo.springbootlearn.model.Task;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,5 +26,29 @@ public class TaskService {
             return task;
         }
         throw new IllegalArgumentException("Task not found or you don't have permission");
+    }
+
+    public List<Task> getAllTasks(String username) {
+        return tasks.values().stream()
+                .filter(task -> task.getOwnerUsername().equals(username))
+                .toList();
+    }
+
+    public Task getTask(String id, String username) {
+        Task task = tasks.get(id);
+        if (task != null && task.getOwnerUsername().equals(username)) {
+            return task;
+        }
+        return null;
+    }
+
+    public Map<String, Object> getTaskStats(String username) {
+        long totalTasks = tasks.values().stream()
+                .filter(task -> task.getOwnerUsername().equals(username))
+                .count();
+        long completedTasks = tasks.values().stream()
+                .filter(task -> task.getOwnerUsername().equals(username) && task.isCompleted())
+                .count();
+        return Map.of("totalTasks", totalTasks, "completedTasks", completedTasks);
     }
 }
