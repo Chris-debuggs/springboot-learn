@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,5 +34,27 @@ public class TaskController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Task>> getAllTasks() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(taskService.getAllTasks(username));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTask(@PathVariable String id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Task task = taskService.getTask(id, username);
+        if (task != null) {
+            return ResponseEntity.ok(task);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Object>> getTaskStats() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(taskService.getTaskStats(username));
     }
 }
