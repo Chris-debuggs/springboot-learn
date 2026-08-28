@@ -1,6 +1,13 @@
 package com.springbootdemo.springbootlearn.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "tasks")
 public class Task {
+    @Id
     private String id;
     private String title;
     private String description;

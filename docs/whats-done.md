@@ -33,7 +33,7 @@ This commit adds the `User` and `Task` entities along with their respective busi
 ```bash
 git add src/main/java/com/springbootdemo/springbootlearn/model/
 git add src/main/java/com/springbootdemo/springbootlearn/service/
-git commit -m "feat(core): add User and Task models with in-memory services" -m "Implemented UserService for registration and login. Implemented TaskService for creating and completing tasks."
+git commit -m "feat(core): add User and Task JPA models with Repository services" -m "Implemented UserService and TaskService using Spring Data JPA Repositories."
 ```
 
 ---

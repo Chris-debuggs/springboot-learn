@@ -1,32 +1,33 @@
 package com.springbootdemo.springbootlearn.service;
 
 import com.springbootdemo.springbootlearn.model.User;
+import com.springbootdemo.springbootlearn.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private final Map<String, User> users = new ConcurrentHashMap<>();
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public void registerUser(String username, String rawPassword) {
-        if (users.containsKey(username)) {
+        if (userRepository.existsById(username)) {
             throw new IllegalArgumentException("User already exists");
         }
-        users.put(username, new User(username, passwordEncoder.encode(rawPassword)));
+        userRepository.save(new User(username, passwordEncoder.encode(rawPassword)));
     }
 
     public User authenticate(String username, String rawPassword) {
-        User user = users.get(username);
-        if (user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
-            return user;
+        Optional<User> userOpt = userRepository.findById(username);
+        if (userOpt.isPresent() && passwordEncoder.matches(rawPassword, userOpt.get().getPassword())) {
+            return userOpt.get();
         }
         return null;
     }
