@@ -69,15 +69,16 @@ Add the necessary web, security, and JWT dependencies.
 - `TaskController.java`: Exposes the remaining task-related GET and POST endpoints.
 - `PublicController.java`: Exposes the public `GET /api/public/ping` endpoint.
 
-#### [NEW] Models & Services
-- `User.java` and `Task.java`: Basic data models (we will use in-memory lists/Maps for simplicity, unless you want to add a database like H2 or PostgreSQL).
+#### [NEW] Models, Repositories, & Services
+- `User.java` and `Task.java`: Basic JPA Entities mapped to a persistent H2 file-based database.
+- `UserRepository.java` and `TaskRepository.java`: Spring Data JPA interfaces for database access.
 - `UserService.java`: Handles user registration (password hashing) and lookup.
 - `TaskService.java`: Handles business logic for creating and retrieving tasks.
 
 ## Open Questions
 
 > [!IMPORTANT]
-> 1. **Data Storage:** To keep things focused on the API and Auth logic, I will use in-memory data structures (like `List` and `Map`) to store Users and Tasks. Is this acceptable, or would you prefer I set up a database like H2 (in-memory DB) or PostgreSQL?
+> 1. **Data Storage:** The application uses an H2 file-based database configured via Spring Data JPA to ensure data persists between restarts.
 > 2. **Application Domain:** Are you happy with the "Task Management" concept, or would you prefer a different mock application (e.g., E-Commerce, Blog)?
 
 ## Verification Plan
